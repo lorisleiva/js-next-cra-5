@@ -1,30 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-import { Metaplex } from '@metaplex-foundation/js-next';
-import { clusterApiUrl, Connection } from '@solana/web3.js';
+import { clusterApiUrl } from '@solana/web3.js';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { MetaplexProvider } from './MetaplexProvider';
+import { CreateNft } from './CreateNft';
+require('@solana/wallet-adapter-react-ui/styles.css');
 
 function App() {
-  const connection = new Connection(clusterApiUrl('devnet'));
-  const mx = Metaplex.make(connection);
-  console.log(mx);
+  const endpoint = clusterApiUrl('devnet');
+  const wallets = [new PhantomWalletAdapter()];
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <MetaplexProvider>
+            <WalletMultiButton></WalletMultiButton>
+            <main>
+              <CreateNft></CreateNft>
+            </main>
+          </MetaplexProvider>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   );
 }
 
