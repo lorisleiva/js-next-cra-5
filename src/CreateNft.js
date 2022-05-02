@@ -4,10 +4,11 @@ export const CreateNft = () => {
   const { metaplex } = useMetaplex();
 
   const onClick = async () => {
-    const { nft } = await metaplex.nfts().createNft({
-      uri: "https://arweave.net/biVXM5LD1D-YL-kiL51lylrSo5S3Di_i6NlyanBkeBM",
+    const { uri } = await metaplex.nfts().uploadMetadata({ 
+      name: 'My NFT',
+      image: 'https://arweave.net/wu-KmIkjZBUf911v4oSNEJXDAuzvGkn9KwMl38-lZSM',
     });
-
+    const { nft } = await metaplex.nfts().createNft({ uri });
     console.log(nft);
   };
 
